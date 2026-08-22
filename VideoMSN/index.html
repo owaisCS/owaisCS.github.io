@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="VideoMSN: Image Classifiers are Efficient Self-Supervised Video Representation Learners">
+  <meta name="description" content="VideoMSN adapts image Vision Transformers to videos via super images and a decoder-free masked Siamese objective, reaching strong action-recognition accuracy with up to 160x fewer video pretraining epochs.">
+  <meta name="keywords" content="VideoMSN, self-supervised learning, video representation learning, masked Siamese network, Vision Transformer, action recognition, Kinetics-400, BMVC 2026">
+  <meta name="author" content="Owais Iqbal, Sudipta Sarkar, Shyam Marjit, Omprakash Chakraborty, Anirban Chakraborty, Abir Das">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="VCL, IISc Bangalore">
+  <meta property="og:title" content="VideoMSN: Image Classifiers are Efficient Self-Supervised Video Representation Learners">
+  <meta property="og:description" content="A decoder-free masked Siamese framework that turns image classifiers into efficient self-supervised video representation learners.">
+  <meta property="og:url" content="https://vcl-iisc.github.io/videomsn/">
+  <meta property="og:image" content="https://vcl-iisc.github.io/videomsn/assets/videomsn_teaser.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="VideoMSN efficiency comparison on Kinetics-400">
+  <meta property="article:published_time" content="2026-01-01T00:00:00.000Z">
+  <meta property="article:author" content="Owais Iqbal">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="self-supervised video learning">
+  <meta property="article:tag" content="masked Siamese networks">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@vcl_iisc">
+  <meta name="twitter:creator" content="@vcl_iisc">
+  <meta name="twitter:title" content="VideoMSN: Image Classifiers are Efficient Self-Supervised Video Representation Learners">
+  <meta name="twitter:description" content="A decoder-free masked Siamese framework that turns image classifiers into efficient self-supervised video representation learners.">
+  <meta name="twitter:image" content="https://vcl-iisc.github.io/videomsn/assets/videomsn_teaser.png">
+  <meta name="twitter:image:alt" content="VideoMSN efficiency comparison on Kinetics-400">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="Image Classifiers are Efficient Self-Supervised Video Representation Learners">
+  <meta name="citation_author" content="Iqbal, Owais">
+  <meta name="citation_author" content="Sarkar, Sudipta">
+  <meta name="citation_author" content="Marjit, Shyam">
+  <meta name="citation_author" content="Chakraborty, Omprakash">
+  <meta name="citation_author" content="Chakraborty, Anirban">
+  <meta name="citation_author" content="Das, Abir">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="BMVC">
+  <meta name="citation_pdf_url" content="https://vcl-iisc.github.io/videomsn/">
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <title>VideoMSN | BMVC 2026</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+  <!-- Critical CSS - Load synchronously -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "Image Classifiers are Efficient Self-Supervised Video Representation Learners",
+    "alternateName": "VideoMSN",
+    "description": "VideoMSN adapts image Vision Transformers to videos via super images and a decoder-free masked Siamese objective, reaching strong action-recognition accuracy with up to 160x fewer video pretraining epochs.",
+    "author": [
+      {"@type": "Person", "name": "Owais Iqbal", "affiliation": {"@type": "Organization", "name": "Indian Institute of Technology Kharagpur"}},
+      {"@type": "Person", "name": "Sudipta Sarkar", "affiliation": {"@type": "Organization", "name": "Indian Institute of Technology Kharagpur"}},
+      {"@type": "Person", "name": "Shyam Marjit", "affiliation": {"@type": "Organization", "name": "Indian Institute of Science"}},
+      {"@type": "Person", "name": "Omprakash Chakraborty", "affiliation": {"@type": "Organization", "name": "Ecole de technologie superieure"}},
+      {"@type": "Person", "name": "Anirban Chakraborty", "affiliation": {"@type": "Organization", "name": "Indian Institute of Science"}},
+      {"@type": "Person", "name": "Abir Das", "affiliation": {"@type": "Organization", "name": "Indian Institute of Technology Kharagpur"}}
+    ],
+    "datePublished": "2026-01-01",
+    "publisher": {
+      "@type": "Organization",
+      "name": "British Machine Vision Conference (BMVC)"
+    },
+    "url": "https://vcl-iisc.github.io/videomsn/",
+    "image": "https://vcl-iisc.github.io/videomsn/assets/videomsn_teaser.png",
+    "keywords": ["self-supervised learning", "video representation learning", "masked Siamese network", "Vision Transformer", "action recognition"],
+    "abstract": "We introduce VideoMSN, a Masked Siamese Network framework for efficient self-supervised spatio-temporal representation learning in videos. Instead of relying on heavy 3D architectures or reconstruction-based autoencoders, VideoMSN repurposes standard image Vision Transformers by representing videos as super images. Starting from pretrained DINO-v3 and DeiT-v3 image encoders, VideoMSN achieves state-of-the-art performance on Kinetics-400, UCF101, and HMDB51 while requiring up to 160x fewer video pretraining epochs than prior methods.",
+    "citation": "@inproceedings{iqbal2026videomsn, title={Image Classifiers are Efficient Self-Supervised Video Representation Learners}, author={Iqbal, Owais and Sarkar, Sudipta and Marjit, Shyam and Chakraborty, Omprakash and Chakraborty, Anirban and Das, Abir}, booktitle={British Machine Vision Conference (BMVC)}, year={2026}}",
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by/4.0/"
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Visual Computing Lab, IISc Bangalore",
+    "url": "https://vcl-iisc.github.io/",
+    "sameAs": ["https://github.com/vcl-iisc"]
+  }
+  </script>
+</head>
+<body>
+
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title"><span class="title-line">Image Classifiers are Efficient Self-Supervised</span><br>Video Representation Learners</h1>
+            <div class="publication-authors authors-line">
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/owais-iqbal-2109/" target="_blank">Owais Iqbal</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://sudipta-rkmrc.github.io/website/" target="_blank">Sudipta Sarkar</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=tg4LJ94AAAAJ&amp;hl=en" target="_blank">Shyam Marjit</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="https://omchakrabarty.github.io/" target="_blank">Omprakash Chakraborty</a><sup>3</sup>,</span>
+              <br>
+              <span class="author-block">
+                <a href="https://anirbanchakraborty.github.io/" target="_blank">Anirban Chakraborty</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="https://cse.iitkgp.ac.in/~adas/" target="_blank">Abir Das</a><sup>1</sup></span>
+            </div>
+
+            <div class="publication-authors publication-affiliations">
+              <span class="author-block"><sup>1</sup> Indian Institute of Technology Kharagpur</span>
+              <span class="author-block"><sup>2</sup> Indian Institute of Science Bangalore</span>
+              <br>
+              <span class="author-block"><sup>3</sup> &Eacute;cole de technologie sup&eacute;rieure, Montreal</span>
+              <br>
+              <span class="paper-block"><b>🎉 BMVC 2026</b></span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="#" data-coming-soon="The paper PDF" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#" data-coming-soon="The arXiv preprint" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#" data-coming-soon="Code and checkpoints" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#" data-coming-soon="The project video" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-video"></i></span>
+                    <span>Video</span>
+                  </a>
+                </span>
+              </div>
+              <p class="coming-soon-note" id="release-note" hidden></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser" aria-labelledby="figure-explorer-title">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <div class="figure-explorer" id="figure1-explorer">
+          <div class="figure-explorer-header">
+            <h2 class="title is-3" id="figure-explorer-title">Can image classifiers learn video representations efficiently?</h2>
+          </div>
+
+          <div class="evaluator-tabs" role="tablist" aria-label="Paper figures">
+            <button class="evaluator-tab is-active" id="figure-tab-teaser" type="button" role="tab" aria-selected="true" aria-controls="figure-panel-teaser" data-figure-tab="teaser">Efficiency</button>
+            <button class="evaluator-tab" id="figure-tab-random" type="button" role="tab" aria-selected="false" aria-controls="figure-panel-random" data-figure-tab="random">Random View</button>
+            <button class="evaluator-tab" id="figure-tab-focal" type="button" role="tab" aria-selected="false" aria-controls="figure-panel-focal" data-figure-tab="focal">Focal View</button>
+            <button class="evaluator-tab" id="figure-tab-model" type="button" role="tab" aria-selected="false" aria-controls="figure-panel-model" data-figure-tab="model">VideoMSN</button>
+          </div>
+
+          <div class="figure-panel is-active" id="figure-panel-teaser" role="tabpanel" aria-labelledby="figure-tab-teaser" data-figure-panel="teaser">
+            <figure class="paper-figure">
+              <img src="assets/videomsn_teaser.png" alt="Kinetics-400 top-1 accuracy versus pretraining epochs for VideoMSN and prior self-supervised video methods" loading="lazy" style="width:88%;">
+              <figcaption><b>Comparison of top-1 accuracy on Kinetics-400 across state-of-the-art self-supervised video representation learning methods.</b> Each point is a method, with bubble size proportional to its pretraining epochs. VideoMSN with a DINO-v3 backbone reaches state-of-the-art accuracy with <b>160&times;</b> and <b>60&times;</b> fewer training epochs than VideoMAE and SMILE, respectively.</figcaption>
+            </figure>
+          </div>
+
+          <div class="figure-panel" id="figure-panel-random" role="tabpanel" aria-labelledby="figure-tab-random" data-figure-panel="random" hidden>
+            <figure class="paper-figure">
+              <img src="assets/videomsn_random_view.png" alt="Construction of a video super image and a temporally consistent random masked view" loading="lazy" style="width:88%;">
+              <figcaption><b>Creation of a super image and a random view.</b> Sampled frames are arranged into a 2D grid in row-major order. A random binary mask is then applied so that patches at the same spatial location are masked or retained together across all frames, preventing temporal leakage.</figcaption>
+            </figure>
+          </div>
+
+          <div class="figure-panel" id="figure-panel-focal" role="tabpanel" aria-labelledby="figure-tab-focal" data-figure-panel="focal" hidden>
+            <figure class="paper-figure">
+              <img src="assets/videomsn_focal_view.png" alt="Two-stage temporal and focal masking used to create fast and slow focal views" loading="lazy" style="width:95%;">
+              <figcaption><b>Two-stage masking of focal views.</b> Temporal masking first drops whole frames to form a fast view (about half the frames) and a slow view (about a quarter). Focal masking then keeps a contiguous spatial region in each remaining frame, producing temporally masked fast and slow focal views.</figcaption>
+            </figure>
+          </div>
+
+          <div class="figure-panel" id="figure-panel-model" role="tabpanel" aria-labelledby="figure-tab-model" data-figure-panel="model" hidden>
+            <figure class="paper-figure">
+              <img src="assets/videomsn_architecture.png" alt="Overview of the VideoMSN masked Siamese architecture" loading="lazy" style="width:100%;">
+              <figcaption><b>Overview of VideoMSN.</b> A masked anchor view and an unmasked target view are encoded by a Siamese ViT, with the target encoder updated by EMA. Both embeddings are assigned to learnable prototypes, and the model aligns the resulting distributions with a cross-entropy loss.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light" id="abstract">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Abstract</h2>
+      <div class="content has-text-justified">
+        <p>We introduce <b>VideoMSN</b>, a Masked Siamese Network framework for efficient self-supervised spatio-temporal representation learning in videos. Instead of relying on heavy 3D architectures or reconstruction-based autoencoders for learning with unlabeled data, we repurpose standard image Vision Transformers by representing videos as super images: grids composed of frames sampled from videos. From each super image, we construct two views: one with spatial patch masking and the other with temporal frame masking, ensuring no information leakage across frames. A shared Vision Transformer (ViT) encoder aligns their embeddings using a masked Siamese loss, capturing both motion and appearance cues without reconstruction. Our decoder-free formulation leverages an image foundation model towards efficient video representation learning. Starting from pretrained DINO-v3 and DeiT-v3 image encoders, VideoMSN achieves state-of-the-art performance on Kinetics-400, UCF101, and HMDB51 while requiring up to <b>32&times; fewer</b> and <b>160&times; fewer</b> video pretraining epochs compared to prior video self-supervised learning methods. The approach also shows strong performance in low-shot classification, confirming the transferability of the learned representations in a label-scarce scenario.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero" id="method">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Method</h2>
+      <p>
+        VideoMSN starts from unlabeled clips, samples \(M\) equidistant frames, and arranges them into a 2D super image following SIFAR. Each super image produces one <b>unmasked target view</b> and a set of <b>masked anchor views</b>. The target encoder is an exponential moving average of the anchor encoder. Both encoders are ordinary 2D ViTs, initialized from DeiT-v3 or DINO-v3, with no 3D inflation and no decoder.
+      </p>
+      <div class="columns is-centered method-columns">
+        <div class="column">
+          <h3 class="title is-5 subhead-title">▷ Random views</h3>
+          <p>Each frame is patchified, and a tube mask drops the same spatial locations across all frames. Masked tokens never enter the encoder, which both reduces compute and blocks temporal copy-paste shortcuts.</p>
+        </div>
+        <div class="column">
+          <h3 class="title is-5 subhead-title">▷ Fast and slow focal views</h3>
+          <p>Temporal masking keeps about \(M/2\) frames (fast, \(3\times3\) grid) or \(M/4\) frames (slow, \(2\times2\) grid). Focal masking then retains a contiguous spatial region in every remaining frame, so the model sees the same action at different temporal sparsities.</p>
+        </div>
+        <div class="column">
+          <h3 class="title is-5 subhead-title">▷ Prototype alignment</h3>
+          <p>Anchor and target [CLS] embeddings are compared with 1024 learnable prototypes and converted into distributions. Training minimizes cross-entropy between them, plus an ME-MAX regularizer that encourages uniform prototype use.</p>
+        </div>
+      </div>
+      <p>
+        The alignment loss over \(K\) anchor views in a batch of size \(B\) is
+        \(\mathcal{L}_{\mathrm{align}} = \frac{1}{KB}\sum_{i=1}^{B}\sum_{j=1}^{K} H(\mathbf{p}^i_j, \mathbf{p}^i_+)\),
+        and the full objective is \(\mathcal{L}_{\mathrm{total}} = \mathcal{L}_{\mathrm{align}} - \lambda H(\bar{\mathbf{p}})\) with \(\lambda=5.0\).
+        Temperatures are \(\tau=0.1\) for anchors and \(\tau^+=0.025\) for targets. Unless noted, we drop 70% of tokens (50% on SSV2) and use six focal views: three fast and three slow.
+      </p>
+    </div>
+  </section>
+
+  <section class="section hero is-light" id="leaderboard-section">
+    <div class="container is-max-desktop content">
+      <div class="leaderboard-heading" id="leaderboard">
+        <div>
+          <h2 class="title"> ▷ Kinetics-400 Results</h2>
+          <p>Self-supervised pretraining on unlabeled Kinetics-400, then full fine-tuning. VideoMSN-DeiT is pretrained for 50 epochs and VideoMSN-DINO for 10 epochs. Competing MAE-style methods typically use 800&ndash;1600 epochs and an extra decoder.</p>
+        </div>
+      </div>
+
+      <div class="leaderboard-tabs" role="tablist" aria-label="Kinetics-400 backbones">
+        <button class="leaderboard-tab is-active" id="leaderboard-tab-vits" type="button" role="tab" aria-selected="true" aria-controls="leaderboard-panel-vits" data-leaderboard-tab="vits">ViT-S</button>
+        <button class="leaderboard-tab" id="leaderboard-tab-vitb" type="button" role="tab" aria-selected="false" aria-controls="leaderboard-panel-vitb" data-leaderboard-tab="vitb">ViT-B</button>
+      </div>
+
+      <div class="leaderboard-panel is-active" id="leaderboard-panel-vits" role="tabpanel" aria-labelledby="leaderboard-tab-vits" data-leaderboard-panel="vits">
+        <div class="table-container leaderboard-table-wrap" style="height:auto; max-height:70vh;">
+          <table class="table is-fullwidth leaderboard-table">
+            <thead><tr><th>Rank</th><th>Method</th><th>Epochs</th><th>Params (M)</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr class="leaderboard-top is-ours"><td><span class="rank-medal rank-gold">1</span></td><td>VideoMSN-DINO (Ours)</td><td>10</td><td>21</td><td><strong>80.8</strong></td></tr>
+              <tr class="leaderboard-top is-ours"><td><span class="rank-medal rank-silver">2</span></td><td>VideoMSN-DeiT (Ours)</td><td>50</td><td>21.5</td><td><strong>80.0</strong></td></tr>
+              <tr><td>3</td><td>SMILE (motion)</td><td>800</td><td>22</td><td>79.5</td></tr>
+              <tr><td>4</td><td>SIGMA-DINO</td><td>800</td><td>22</td><td>79.4</td></tr>
+              <tr><td>5</td><td>VideoMAE</td><td>800</td><td>22</td><td>79.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="leaderboard-note">VideoMSN-DINO (ViT-S) improves the previous best by 1.3% after only 10 video epochs. Parameter counts are encoder-only; competing methods add a decoder at pretraining time.</p>
+      </div>
+
+      <div class="leaderboard-panel" id="leaderboard-panel-vitb" role="tabpanel" aria-labelledby="leaderboard-tab-vitb" data-leaderboard-panel="vitb" hidden>
+        <div class="table-container leaderboard-table-wrap" style="height:auto; max-height:70vh;">
+          <table class="table is-fullwidth leaderboard-table">
+            <thead><tr><th>Rank</th><th>Method</th><th>Epochs</th><th>Params (M)</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr class="leaderboard-top is-ours"><td><span class="rank-medal rank-gold">1</span></td><td>VideoMSN-DINO (Ours)</td><td>10</td><td>86</td><td><strong>83.3</strong></td></tr>
+              <tr><td>2</td><td>SMILE (motion)</td><td>600</td><td>87</td><td>83.1</td></tr>
+              <tr class="is-ours"><td>3</td><td>VideoMSN-DeiT (Ours)</td><td>50</td><td>86.5</td><td><strong>82.0</strong></td></tr>
+              <tr><td>4</td><td>MME</td><td>1600</td><td>87</td><td>81.8</td></tr>
+              <tr><td>5</td><td>MGM</td><td>1600</td><td>87</td><td>81.7</td></tr>
+              <tr><td>6</td><td>SIGMA-DINO</td><td>800</td><td>87</td><td>81.6</td></tr>
+              <tr><td>7</td><td>VideoMAE</td><td>1600</td><td>87</td><td>81.5</td></tr>
+              <tr><td>8</td><td>ST-MAE</td><td>800</td><td>87</td><td>81.3</td></tr>
+              <tr><td>9</td><td>MGMAE</td><td>800</td><td>87</td><td>81.2</td></tr>
+              <tr><td>10</td><td>MGM / OmniMAE / ViC-MAE</td><td>800</td><td>87</td><td>80.8</td></tr>
+              <tr><td>11</td><td>CMAE-V</td><td>800</td><td>87</td><td>80.2</td></tr>
+              <tr><td>12</td><td>VideoMAE</td><td>800</td><td>87</td><td>80.0</td></tr>
+              <tr><td>13</td><td>SVT</td><td>20</td><td>121</td><td>78.1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="leaderboard-note">VideoMSN-DINO (ViT-B) sets a new state of the art at 83.3% after 10 epochs, beating SMILE (600 epochs) and VideoMAE (1600 epochs). SMILE additionally uses synthetic motion signals.</p>
+      </div>
+
+      <h2 class="title section-subtitle">▷ UCF101, HMDB51, and SSV2 Results</h2>
+      <div class="table-container">
+        <table class="table is-striped is-hoverable is-fullwidth results-table">
+          <thead>
+            <tr><th>Dataset</th><th>Backbone</th><th>MoCo v3</th><th>VideoMAE</th><th>VideoMSN-DeiT</th><th>VideoMSN-DINO</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>UCF101</td><td>ViT-B</td><td>81.7</td><td>91.3 <small>(3200 ep)</small></td><td>92.0 <small>(50 ep)</small></td><td class="is-ours"><b>95.4</b> <small>(10 ep)</small></td></tr>
+            <tr><td>HMDB51</td><td>ViT-B</td><td>39.2</td><td>62.6 <small>(4800 ep)</small></td><td>62.6 <small>(50 ep)</small></td><td class="is-ours"><b>70.4</b> <small>(10 ep)</small></td></tr>
+            <tr><td>SSV2</td><td>ViT-S</td><td>&mdash;</td><td><b>66.8</b> <small>(2400 ep)</small></td><td>64.8 <small>(50 ep)</small></td><td>65.8 <small>(10 ep)</small></td></tr>
+            <tr><td>SSV2</td><td>ViT-B</td><td>54.2</td><td><b>70.8</b> <small>(2400 ep)</small></td><td>69.0 <small>(50 ep)</small></td><td>69.4 <small>(10 ep)</small></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        On UCF101 and HMDB51, VideoMSN-DINO is best while using <b>320&times;</b> and <b>480&times;</b> fewer pretraining epochs than VideoMAE. On motion-centric SSV2 it trails VideoMAE by 1.0&ndash;1.4% with a <b>240&times;</b> shorter schedule, which we view as a favorable efficiency trade-off.
+      </p>
+      <p>
+        All VideoMSN models use 16-frame inputs. Fine-tuning uses Mixup, CutMix, and label smoothing for 30 epochs. Evaluation is \(5\times3\) crops on Kinetics-400 and UCF101, \(10\times3\) on HMDB51, and \(2\times3\) on SSV2.
+      </p>
+    </div>
+  </section>
+
+  <section class="section hero" id="results">
+    <div class="container is-max-desktop content">
+      <h2 class="title">🚀 Efficiency and Low-shot Results</h2>
+      <h3 class="title is-5 subhead-title">▷ Training-time compute</h3>
+      <div class="stat-grid">
+        <div class="stat-card"><strong>160&times;</strong><span>fewer video pretraining epochs than VideoMAE (10 vs 1600)</span></div>
+        <div class="stat-card"><strong>12.3&times;</strong><span>lower wall-clock time on 4x H100 GPUs (21.7 h vs 266.7 h)</span></div>
+        <div class="stat-card"><strong>8.9&times;</strong><span>fewer total pretraining FLOPs (4.58 E vs 40.89 E)</span></div>
+      </div>
+      <div class="table-container">
+        <table class="table is-striped is-hoverable is-fullwidth results-table">
+          <thead><tr><th>Method</th><th>Epochs</th><th>Time / epoch</th><th>Wall-clock</th><th>Total FLOPs</th></tr></thead>
+          <tbody>
+            <tr><td>VideoMAE (ViT-B)</td><td>1600</td><td>~10 min</td><td>266.7 h</td><td>40.89 E</td></tr>
+            <tr class="is-ours"><td>VideoMSN-DINO (ViT-B)</td><td><b>10</b></td><td>~130 min</td><td><b>21.7 h</b></td><td><b>4.58 E</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        VideoMSN is heavier per epoch because a super image is a large 2D grid, but the much shorter schedule still dominates total cost. As a control, initializing VideoMAE from ImageNet-pretrained ViT-B and training it for only 50 video epochs yields 57% top-1 on Kinetics-400, suggesting that decoder-based MAE is a poor fit for short adaptation of image foundation models.
+      </p>
+
+      <h3 class="title is-5 subhead-title" style="margin-top: 1.75rem; margin-bottom: 0.5rem;">▷ Low-shot classification on UCF101</h3>
+      <p>
+        Following SMILE, we fine-tune ViT-B models pretrained on 16-frame Kinetics-400 using only 1000 labeled UCF101 videos.
+      </p>
+      <div class="table-container">
+        <table class="table is-striped is-hoverable is-fullwidth results-table">
+          <thead><tr><th>VideoMAE</th><th>MME</th><th>SIGMA</th><th>SMILE</th><th>VideoMSN-DeiT</th><th>VideoMSN-DINO</th></tr></thead>
+          <tbody>
+            <tr><td>74.6</td><td>79.2</td><td>84.1</td><td>86.4</td><td>88.0</td><td class="is-ours"><b>89.0</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        VideoMSN-DINO reaches 89.0%, a <b>+2.6%</b> gain over SMILE, showing that the learned features remain label-efficient.
+      </p>
+    </div>
+  </section>
+
+  <section class="section hero is-light" id="ablations">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Ablations</h2>
+      <p>
+        Default setting: VideoMSN-DeiT, ViT-S, 16-frame Kinetics-400, 50 pretraining epochs, 30-epoch fine-tuning, \(5\times3\) evaluation. Highlighted entries are the paper default.
+      </p>
+      <div class="ablation-grid">
+        <div class="ablation-card">
+          <h3 class="title is-5">(a) Temporal augmentations</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th>Approach</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr><td>w/o temporal aug</td><td>78.6</td></tr>
+              <tr class="is-ours"><td>w/ temporal aug</td><td><b>80.0</b></td></tr>
+            </tbody>
+          </table>
+          <p>Dropping frames into \(3\times3\) fast and \(2\times2\) slow focal views beats keeping all six focal views as \(4\times4\) grids by 1.4 points.</p>
+        </div>
+        <div class="ablation-card">
+          <h3 class="title is-5">(b) Sinkhorn normalization</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th>Approach</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr class="is-ours"><td>w/o Sinkhorn</td><td><b>80.0</b></td></tr>
+              <tr><td>w/ Sinkhorn</td><td>79.1</td></tr>
+            </tbody>
+          </table>
+          <p>With \(\lambda=5.0\) ME-MAX regularization, Sinkhorn is unnecessary and slightly hurts accuracy.</p>
+        </div>
+        <div class="ablation-card">
+          <h3 class="title is-5">(c) Anchor views</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th>Anchor views</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr><td>Only random</td><td>78.5</td></tr>
+              <tr><td>Only focal</td><td>77.1</td></tr>
+              <tr class="is-ours"><td>Both views</td><td><b>80.0</b></td></tr>
+            </tbody>
+          </table>
+          <p>Random and focal views are complementary; using both gives the best representation.</p>
+        </div>
+        <div class="ablation-card">
+          <h3 class="title is-5">(d) Focal views</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th>Focal views</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr><td>Only fast</td><td>78.6</td></tr>
+              <tr><td>Only slow</td><td>77.5</td></tr>
+              <tr class="is-ours"><td>Both views</td><td><b>80.0</b></td></tr>
+            </tbody>
+          </table>
+          <p>Learning from both temporal granularities is better than either speed alone.</p>
+        </div>
+      </div>
+      <p style="text-align:center; margin-top: 1.5rem;">
+        <a href="./more_results.html">▷ Dataset details, hyperparameter sweeps, tube masking, and additional SSV2 ablations</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@inproceedings{iqbal2026videomsn,
+  title     = {Image Classifiers are Efficient Self-Supervised Video Representation Learners},
+  author    = {Iqbal, Owais and Sarkar, Sudipta and Marjit, Shyam and Chakraborty, Omprakash and Chakraborty, Anirban and Das, Abir},
+  booktitle = {British Machine Vision Conference (BMVC)},
+  year      = {2026}
+}</code></pre>
+    </div>
+  </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

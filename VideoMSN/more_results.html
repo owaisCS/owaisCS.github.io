@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <meta name="title" content="VideoMSN: Supplementary Results">
+  <meta name="description" content="Supplementary VideoMSN dataset details, hyperparameter sweeps, tube masking, prototype ablations, and additional SSV2 studies.">
+  <meta name="keywords" content="VideoMSN, self-supervised learning, video representation learning, masked Siamese network, Kinetics-400, SSV2, BMVC 2026">
+  <meta name="author" content="Owais Iqbal, Sudipta Sarkar, Shyam Marjit, Omprakash Chakraborty, Anirban Chakraborty, Abir Das">
+  <title>VideoMSN Supplementary Results | BMVC 2026</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+</head>
+<body>
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title"><span class="title-line">Image Classifiers are Efficient Self-Supervised</span><br>Video Representation Learners</h1>
+            <div class="publication-authors authors-line">
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/owais-iqbal-2109/" target="_blank">Owais Iqbal</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://sudipta-rkmrc.github.io/website/" target="_blank">Sudipta Sarkar</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=tg4LJ94AAAAJ&amp;hl=en" target="_blank">Shyam Marjit</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="https://omchakrabarty.github.io/" target="_blank">Omprakash Chakraborty</a><sup>3</sup>,</span>
+              <br>
+              <span class="author-block">
+                <a href="https://anirbanchakraborty.github.io/" target="_blank">Anirban Chakraborty</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="https://cse.iitkgp.ac.in/~adas/" target="_blank">Abir Das</a><sup>1</sup></span>
+            </div>
+
+            <div class="publication-authors publication-affiliations">
+              <span class="author-block"><sup>1</sup> Indian Institute of Technology Kharagpur</span>
+              <span class="author-block"><sup>2</sup> Indian Institute of Science Bangalore</span>
+              <br>
+              <span class="author-block"><sup>3</sup> &Eacute;cole de technologie sup&eacute;rieure, Montreal</span>
+              <br>
+              <span class="paper-block"><b>🎉 BMVC 2026</b></span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="#" data-coming-soon="The paper PDF" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#" data-coming-soon="The arXiv preprint" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#" data-coming-soon="Code and checkpoints" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#" data-coming-soon="The project video" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-video"></i></span>
+                    <span>Video</span>
+                  </a>
+                </span>
+              </div>
+              <p class="coming-soon-note" id="release-note" hidden></p>
+              <p><a class="back-to-project" href="./index.html">Back to project page</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light" id="datasets">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-3 has-text-centered">Supplementary Results</h2>
+      <h2 class="title">Dataset Details</h2>
+      <p>VideoMSN is evaluated on four standard action-recognition benchmarks. Pretraining and fine-tuning use unlabeled videos plus labels only at the fine-tuning stage.</p>
+
+      <h3 class="title is-5 subhead-title">▷ Kinetics-400 (<a href="https://deepmind.com/research/open-source/kinetics" target="_blank" rel="noopener noreferrer">Public link</a>)</h3>
+      <p>Kinetics-400 contains 306,245 YouTube clips across 400 action classes, with at least 400 clips per class and an average duration of about 10 seconds. Actions cover person actions, person&ndash;person interactions, and person&ndash;object interactions. It is the main large-scale pretraining and evaluation set in the paper.</p>
+
+      <h3 class="title is-5 subhead-title">▷ UCF-101 (<a href="https://www.crcv.ucf.edu/data/UCF101.php" target="_blank" rel="noopener noreferrer">Public link</a>)</h3>
+      <p>UCF-101 has 13,320 unconstrained YouTube clips from 101 human action categories, grouped into human&ndash;object interaction, body-motion only, human&ndash;human interaction, playing musical instruments, and sports. Videos are 320&times;240 at 25 fps with an average length of about 7.2 seconds.</p>
+
+        <h3 class="title is-5 subhead-title">▷ HMDB-51 (<a href="https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/" target="_blank" rel="noopener noreferrer">Public link</a>)</h3>
+        <p>HMDB-51 contains 6,766 clips from 51 action categories, with at least 101 clips per class, sourced from movies, public databases, and YouTube. Clips are standardized to 30 fps with height 240. Categories include facial actions, body movements, and human interactions.</p>
+
+      <h3 class="title is-5 subhead-title">▷ Something-Something V2 (<a href="https://www.qualcomm.com/developer/software/something-something-v-2-dataset" target="_blank" rel="noopener noreferrer">Public link</a>)</h3>
+      <p>SSV2 has over 220K videos and 174 classes focused on fine-grained human&ndash;object interactions such as &ldquo;turning something upside down.&rdquo; It is motion-heavy and is the most challenging transfer setting for our 2D super-image formulation.</p>
+    </div>
+  </section>
+
+  <section class="section hero" id="hyperparameters">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Hyperparameter Selection</h2>
+      <p>
+        Crucial hyperparameters were chosen on a class-balanced 25% subset of Kinetics-400 using VideoMSN-DeiT with a 16-frame ViT-S backbone and \(4\times4\) super images. The selected values were then used on all full benchmarks. These subset numbers are not comparable to the 80.0% full Kinetics-400 result in the main paper.
+      </p>
+      <div class="ablation-grid">
+        <div class="ablation-card">
+          <h3 class="title is-5">(a) Learning rate</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th>lr</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr><td>1e-4</td><td>68.6</td></tr>
+              <tr class="is-ours"><td>1e-5</td><td><b>69.1</b></td></tr>
+              <tr><td>1e-6</td><td>66.2</td></tr>
+            </tbody>
+          </table>
+          <p>\(1\mathrm{e}{-5}\) is the most stable among the tested rates.</p>
+        </div>
+        <div class="ablation-card">
+          <h3 class="title is-5">(b) Weight decay</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th>Weight decay</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr><td>0.05</td><td>68.8</td></tr>
+              <tr class="is-ours"><td>0.01</td><td><b>69.1</b></td></tr>
+              <tr><td>0.1</td><td>68.9</td></tr>
+            </tbody>
+          </table>
+          <p>A decay of 0.01 gives the best regularization trade-off.</p>
+        </div>
+        <div class="ablation-card">
+          <h3 class="title is-5">(c) Patch drop ratio</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th>Patch drop</th><th>BS / GPU</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr><td>0.3</td><td>8</td><td>68.9</td></tr>
+              <tr><td>0.5</td><td>10</td><td>68.9</td></tr>
+              <tr class="is-ours"><td>0.7</td><td>12</td><td><b>69.1</b></td></tr>
+              <tr><td>0.9</td><td>14</td><td>68.8</td></tr>
+            </tbody>
+          </table>
+          <p>Dropping 70% of tokens enables a larger batch and remains the best accuracy/compute compromise on Kinetics-400.</p>
+        </div>
+        <div class="ablation-card">
+          <h3 class="title is-5">(d) Number of focal views</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th># Views</th><th>Throughput</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr class="is-ours"><td>6</td><td>42 v/s</td><td><b>69.1</b></td></tr>
+              <tr><td>8</td><td>35 v/s</td><td>69.2</td></tr>
+              <tr><td>10</td><td>32 v/s</td><td>69.3</td></tr>
+            </tbody>
+          </table>
+          <p>More views help slightly but reduce throughput. We keep 6 views as the default balance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light" id="masking">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Tube Masking and Prototypes</h2>
+      <p>These ablations use the full Kinetics-400 training set with VideoMSN-DeiT (ViT-S) and 16-frame inputs.</p>
+      <div class="ablation-grid">
+        <div class="ablation-card">
+          <h3 class="title is-5">Tube masking vs random masking</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th>Masking strategy</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr><td>Random masking</td><td>79.0</td></tr>
+              <tr class="is-ours"><td>Tube masking</td><td><b>80.0</b></td></tr>
+            </tbody>
+          </table>
+          <p>
+            Tube masking applies the same spatial mask to every frame in the super image. Because neighboring frames are highly correlated, independent per-frame masks leak information and let the model copy visible patches across time. Consistent tubes close that shortcut and improve top-1 accuracy by 1.0%.
+          </p>
+        </div>
+        <div class="ablation-card">
+          <h3 class="title is-5">Number of prototypes</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th># Prototypes</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr><td>512</td><td>78.6</td></tr>
+              <tr class="is-ours"><td>1024</td><td><b>80.0</b></td></tr>
+              <tr><td>2048</td><td>80.0</td></tr>
+            </tbody>
+          </table>
+          <p>
+            Increasing the prototype count from 512 to 1024 yields a 1.4% gain. Doubling again to 2048 does not help, so we follow MSN and use 1024 prototypes of dimension 256.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero" id="ssv2-ablations">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Additional SSV2 Ablations</h2>
+      <p>SSV2 is motion-centric, so we retune a few design choices with VideoMSN-DINO (ViT-S).</p>
+      <div class="ablation-grid">
+        <div class="ablation-card">
+          <h3 class="title is-5">Patch drop ratio on SSV2</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th>Patch drop</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr><td>70%</td><td>64.8</td></tr>
+              <tr class="is-ours"><td>50%</td><td><b>65.8</b></td></tr>
+              <tr><td>25%</td><td>65.3</td></tr>
+            </tbody>
+          </table>
+          <p>
+            A 70% drop, which is best on Kinetics-400, is too aggressive on SSV2. A 50% drop gives the strongest motion-sensitive representation.
+          </p>
+        </div>
+        <div class="ablation-card">
+          <h3 class="title is-5">Focal view configurations on SSV2</h3>
+          <table class="table is-fullwidth results-table">
+            <thead><tr><th>Focal views</th><th>Top-1</th></tr></thead>
+            <tbody>
+              <tr><td>No temporal masking</td><td>65.8</td></tr>
+              <tr><td>Fast only</td><td>65.7</td></tr>
+              <tr><td>Slow only</td><td>65.5</td></tr>
+              <tr class="is-ours"><td>Both views</td><td><b>65.8</b></td></tr>
+            </tbody>
+          </table>
+          <p>
+            Combining three \(3\times3\) fast views and three \(2\times2\) slow views matches or exceeds the single-scale alternatives, so the main paper keeps the mixed schedule.
+          </p>
+        </div>
+      </div>
+      <h3 class="title is-5 subhead-title">Pretraining length on SSV2</h3>
+      <div class="table-container">
+        <table class="table is-striped is-hoverable is-fullwidth results-table">
+          <thead><tr><th>Model</th><th>Patch drop</th><th>Pretraining</th><th>Top-1</th></tr></thead>
+          <tbody>
+            <tr><td>VideoMSN-DINO (ViT-S)</td><td>0.5</td><td>5 epochs</td><td>65.5</td></tr>
+            <tr class="is-ours"><td>VideoMSN-DINO (ViT-S)</td><td>0.5</td><td>10 epochs</td><td><b>65.8</b></td></tr>
+            <tr><td>VideoMSN-DINO (ViT-S)</td><td>0.5</td><td>20 epochs</td><td>64.9</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Ten epochs remain the sweet spot. Extending to 20 epochs does not improve SSV2 and can slightly overfit the short adaptation schedule.</p>
+    </div>
+  </section>
+
+  <section class="section hero is-light" id="implementation">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Implementation Notes</h2>
+      <ul>
+        <li>Backbones: ViT-S and ViT-B, initialized from DeiT-v3 or distilled DINO-v3 image checkpoints.</li>
+        <li>Pretraining: AdamW, cosine learning rate, 50 epochs with 5-epoch warmup for VideoMSN-DeiT, 10 epochs with 1-epoch warmup for VideoMSN-DINO.</li>
+        <li>Regularization: DropPath 0.01, weight decay 0.01, prototype temperatures \(\tau=0.1\), \(\tau^+=0.025\), ME-MAX weight \(\lambda=5.0\).</li>
+        <li>Hardware: 4&times;NVIDIA H100 GPUs. Wall-clock comparisons with VideoMAE use the same server, 4&times;H100 80GB, batch size 32, 24 workers, Intel Xeon Platinum 8480C (112 cores), and 2 TB RAM.</li>
+        <li>Main-table Kinetics-400 numbers are averaged over two random seeds. Ablations and supplementary tables use a single seed to save compute.</li>
+      </ul>
+      <p>We acknowledge the National Supercomputing Mission (NSM) for PARAM Shakti and the DGX GPU cluster at IIT Kharagpur, and C-DAC for additional computing resources.</p>
+    </div>
+  </section>
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@inproceedings{iqbal2026videomsn,
+  title     = {Image Classifiers are Efficient Self-Supervised Video Representation Learners},
+  author    = {Iqbal, Owais and Sarkar, Sudipta and Marjit, Shyam and Chakraborty, Omprakash and Chakraborty, Anirban and Das, Abir},
+  booktitle = {British Machine Vision Conference (BMVC)},
+  year      = {2026}
+}</code></pre>
+    </div>
+  </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
